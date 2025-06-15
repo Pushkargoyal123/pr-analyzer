@@ -23,9 +23,9 @@ import { Analysis } from '../schemas/analysis.ts';
  * - Handles unexpected errors with a generic internal server error response.
  */
 export const analyzePRController = async (req: Request, res: Response) => {
+  // Extract required parameters from request body
+  const { owner, repo, prNumber } = req.body as Analysis;
   try {
-    // Extract required parameters from request body
-    const { owner, repo, prNumber } = req.body as Analysis;
     const codeSnippet = req.query.codeSnippet as string;
     // Extract Bearer token from Authorization header
     const token = req.headers.authorization?.split(' ')[1];
@@ -40,8 +40,17 @@ export const analyzePRController = async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error in analyzePRController:', error);
 
+    type ErrorModel = { status?: number; code?: number; message?: string };
+
+    if ((error as ErrorModel).status === 404) {
+      res.status(404).json({ message: `Pull Request #${prNumber} not found in ${owner}/${repo}` });
+    }
+    // Optional: handle 403 (permission), 401 (unauthorized), etc.
+    else if ((error as ErrorModel).status === 403) {
+      res.status(403).json({ message: `Access denied to PR #${prNumber}` });
+    }
     // Handle duplicate key error (PR already analyzed)
-    if ((error as { code: number }).code === 11000) {
+    else if ((error as ErrorModel).code === 11000) {
       res.status(400).json({ message: 'PR already analyzed for this repository.' });
     } else {
       internalServerError(res, error);

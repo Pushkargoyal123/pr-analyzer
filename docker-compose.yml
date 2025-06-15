@@ -1,15 +1,16 @@
 services:
   pr-analyser-app:
-    build: .
+    image: pushkargoyal/pr-analyzer
     container_name: pr-analyser-app
     ports:
       - '3000:3000'
     depends_on:
       - mongo
+    env_file:
+      - .env
     environment:
       - MONGODB_URI=mongodb://root:example@mongo:27017
       - PORT=3000
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules # Prevent host's node_modules from overriding container's
@@ -39,6 +40,3 @@ services:
 
 volumes:
   mongo_data:
-
-env_file:
-  - .env
