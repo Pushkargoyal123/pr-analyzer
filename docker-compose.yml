@@ -1,6 +1,6 @@
 services:
   pr-analyser-app:
-    build: .
+    image: pushkargoyal/pr-analyzer
     container_name: pr-analyser-app
     ports:
       - '3000:3000'
