@@ -19,26 +19,28 @@ export const analyzePullRequest = async (
   owner: string,
   repo: string,
   prNumber: number,
-  token: string,
+  token: string | undefined,
   codeSnippet?: string
 ) => {
+  type ErrorModel = { error: string };
   // get the difference of the PR
   const diff = await getPRDiff(owner, repo, prNumber, token);
   // getting the response after analyzing the code with LLM
   const analysis = (await analyzeCodeWithLLM(diff, codeSnippet)) as string;
+
   if (!analysis) {
     console.error('No analysis response received from LLM');
     throw new Error('No analysis response received from LLM');
   }
-  if (typeof analysis === 'object' && (analysis as { error: string }).error) {
-    console.error('Error analyzing PR:', (analysis as { error: string }).error);
-    throw new Error((analysis as { error: string }).error);
+  if (typeof analysis === 'object' && (analysis as ErrorModel).error) {
+    console.error('Error analyzing PR:', (analysis as ErrorModel).error);
+    throw new Error((analysis as ErrorModel).error);
   }
   // getting the issues from the analysis response of JSON format
   const jsonStart = analysis.indexOf('[');
   const jsonEnd = analysis.lastIndexOf(']') + 1;
 
-  if (jsonStart && jsonEnd) {
+  if (jsonStart !== -1 && jsonEnd !== -1) {
     const jsonData = analysis.slice(jsonStart, jsonEnd);
     const result = {
       analysisId: crypto.randomUUID(),

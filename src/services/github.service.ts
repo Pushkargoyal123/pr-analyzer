@@ -16,7 +16,7 @@ export const getPRDiff = async (
   owner: string,
   repo: string,
   prNumber: number,
-  token: string
+  token: string | undefined
 ): Promise<string> => {
   const octokit = new Octokit({ auth: token });
 

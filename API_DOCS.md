@@ -2,7 +2,8 @@
 
 ## POST `/api/analyze-pr`
 
-# query parameter 
+# query parameter
+
 `codeSnippet` if passed, will get the code snippet in response as well
 
 Analyze a GitHub pull request for backend-specific issues using LLM.
@@ -13,7 +14,7 @@ Analyze a GitHub pull request for backend-specific issues using LLM.
 {
   "owner": "string", // GitHub repo owner
   "repo": "string", // GitHub repo name
-  "prNumber": 123, // PR number
+  "prNumber": 123 // PR number
 }
 ```
 
@@ -67,7 +68,7 @@ Analyze a GitHub pull request for backend-specific issues using LLM.
 
 ```json
 {
-  "error": "Authorization token is required",
+  "error": "Authorization token is required"
 }
 ```
 
@@ -103,7 +104,6 @@ Fetch all the PR's issues from database
   ]
 }
 ```
-
 
 ### Error Responses
 
