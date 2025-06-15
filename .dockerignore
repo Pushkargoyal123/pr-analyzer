@@ -1,0 +1,11 @@
+# Ignore node_modules directory (since you'll install dependencies inside the container)
+node_modules
+
+# Ignore local environment files (e.g., .env or other config files)
+.env
+
+# Ignore Dockerfile and .dockerignore itself (not needed inside the image)
+Dockerfile
+.dockerignore
+
+dist/
