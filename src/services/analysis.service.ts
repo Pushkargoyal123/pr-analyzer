@@ -75,7 +75,8 @@ export const analyzePullRequest = async (
       );
       console.log('file and issue data', file, issue);
       if (file?.patch) {
-        const position = getDiffPosition(file?.patch, issue.line);
+        const position = getDiffPosition(file?.patch, issue.line || issue.lineNumber || 1);
+        console.log('comment position', position);
         commentPromiseArray.push(
           commentOnPR(owner, repo, prNumber, issue, token as string, position as number)
         );

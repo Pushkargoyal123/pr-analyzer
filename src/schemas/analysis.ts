@@ -12,6 +12,7 @@ export interface Issue {
   description: string;
   location: string;
   fileLocation?: string; // Optional, used for file paths in PR diffs
+  lineNumber?: number;
 }
 
 export interface Analysis extends Document {
