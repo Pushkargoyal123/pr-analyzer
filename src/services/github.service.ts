@@ -83,7 +83,7 @@ export const commentOnPR = async (
       pull_number,
       body: issueObject.recommendation,
       commit_id: commitId, // SHA of the commit in the PR
-      path: issueObject.file, // relative file path
+      path: issueObject.file || issueObject.fileLocation || issueObject.location, // relative file path
       position,
     })
     .then(() => {
